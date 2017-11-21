@@ -1,0 +1,29 @@
+{
+  "name": "recipes-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SvenWesterlaken/recipes-db.git"
+  },
+  "author": "Sven Westerlaken & Michael Jacobs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SvenWesterlaken/recipes-db/issues"
+  },
+  "homepage": "https://github.com/SvenWesterlaken/recipes-db#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jwt-simple": "^0.5.1",
+    "mongoose": "^4.13.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}

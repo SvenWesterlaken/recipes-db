@@ -1,0 +1,7 @@
+{
+  "webPort": "8080",
+  "dbServer": "localhost",
+  "dbName": "recipes-db",
+  "dbTestName": "recipes-db-test",
+  "secretkey": "SecretKeyForRecipesProgram-0287362-"
+}
