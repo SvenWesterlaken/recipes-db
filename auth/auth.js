@@ -4,7 +4,7 @@ var settings = require('../config.json'),
 
 function encodeToken(username) {
     const playload = {
-        exp: moment().add(1, 'weeks').unix(),
+        exp: moment().add(2, 'hours').unix(),
         iat: moment().unix(),
         sub: username
     };
