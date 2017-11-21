@@ -3,5 +3,9 @@
   "dbServer": "localhost",
   "dbName": "recipes-db",
   "dbTestName": "recipes-db-test",
-  "secretkey": "SecretKeyForRecipesProgram-0287362-"
+  "secretkey": "SecretKeyForRecipesProgram-0287362-",
+  "dbOptions": {
+    "useMongoClient": true,
+    "poolSize": 10
+  }
 }
