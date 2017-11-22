@@ -1,4 +1,4 @@
-var settings = require('../config.json'),
+var settings = require('../config/env'),
     moment = require('moment'),
     jwt = require('jwt-simple');
 
@@ -8,14 +8,14 @@ function encodeToken(username) {
         iat: moment().unix(),
         sub: username
     };
-    return jwt.encode(playload, settings.secretkey);
+    return jwt.encode(playload, settings.env.secretkey);
 }
 
 
 function decodeToken(token, cb) {
 
     try {
-        const payload = jwt.decode(token, settings.secretkey);
+        const payload = jwt.decode(token, settings.env.secretkey);
         const now = moment().unix();
 
         // Check if the token has expired

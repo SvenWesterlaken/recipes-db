@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const config = require('../config.json');
+const config = require('../config/env');
 
 before((done) => {
-  mongoose.connect(config.dbTestServer, config.dbOptions);
+  mongoose.connect(config.test.dbTestServer, config.test.dbOptions);
   mongoose.connection.once('open', () => done() ).on('error', (err) => {
     console.warn('Warning', error);
   });
