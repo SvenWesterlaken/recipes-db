@@ -15,7 +15,7 @@ const app = express();
 mongoose.Promise = global.Promise;
 
 if(process.env.NODE_ENV !== 'test') {
-  mongoose.connect('mongodb://' + config.dbServer + '/' + config.dbName, config.dbOptions);
+  mongoose.connect(config.dbServer, config.dbOptions).catch((err) => console.log(err));
 }
 
 //Setup for auth & bodyparser
@@ -38,3 +38,5 @@ app.all('*', basic.notFound);
 app.listen(config.webPort, () => {
   console.log('Running on port:'+ config.webPort);
 });
+
+module.exports = app;

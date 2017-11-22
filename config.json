@@ -1,11 +1,12 @@
 {
   "webPort": "8080",
-  "dbServer": "localhost",
-  "dbName": "recipes-db",
-  "dbTestName": "recipes-db-test",
+  "dbServer": "mongodb://sven.westerlaken:83mkU&n5@ds042527.mlab.com:42527/recipes-db",
+  "dbTestServer": "mongodb://sven.westerlaken:83mkU&n5@ds042677.mlab.com:42677/recipes-test-db",
   "secretkey": "SecretKeyForRecipesProgram-0287362-",
   "dbOptions": {
     "useMongoClient": true,
-    "poolSize": 10
+    "poolSize": 10,
+    "user": "admin",
+    "pass": "123admin"
   }
 }

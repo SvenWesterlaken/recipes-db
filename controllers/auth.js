@@ -62,7 +62,7 @@ module.exports = {
       });
 
     } else {
-      res.status(401).json({error: "Invalid Registration Credentials"});
+      res.status(401).json({error: "Invalid Login Credentials"});
     }
   },
 
