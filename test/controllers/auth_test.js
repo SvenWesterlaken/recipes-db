@@ -34,7 +34,7 @@ describe('User login', function() {
   it('Invalid password', function(done) {
     chai.request(server)
       .post('/api/v1/login')
-      .send({email: test.email, password: 'test'})
+      .send({email: credentials.email, password: 'test'})
       .end((err, res) => {
         expect(err).to.not.be.null;
         expect(res).to.have.status(401);
