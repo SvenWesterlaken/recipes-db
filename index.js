@@ -35,8 +35,8 @@ app.use((err, req, res, next) => {
 
 app.all('*', basic.notFound);
 
-app.listen(config.webPort, () => {
-  console.log('Running on port:'+ config.webPort);
+app.listen(port, () => {
+  console.log('Running on port:'+ port);
 });
 
 module.exports = app;

@@ -2,10 +2,7 @@ language: node_js
 
 node_js:
   - "stable"
-
-before_script:
-  - npm i
-  - npm i --only=dev
+  
 after_success:
   - npm run coveralls
 
