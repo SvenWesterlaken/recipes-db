@@ -8,14 +8,14 @@ function encodeToken(username) {
         iat: moment().unix(),
         sub: username
     };
-    return jwt.encode(playload, settings.env.secretkey);
+    return jwt.encode(playload, settings.secretkey);
 }
 
 
 function decodeToken(token, cb) {
 
     try {
-        const payload = jwt.decode(token, settings.env.secretkey);
+        const payload = jwt.decode(token, settings.secretkey);
         const now = moment().unix();
 
         // Check if the token has expired

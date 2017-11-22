@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Recipe = require('./models/recipe');
+const Recipe = require('../models/recipe');
 
 function seed() {
 

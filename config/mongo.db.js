@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const config = require('./env');
 
-mongoose.Promise = global.Promise;
+function connect() {
+  mongoose.Promise = global.Promise;
 
-mongoose.connect(config.dburl);
-var connection = mongoose.connection
-    .once('open', () => console.log('Connected to Mongo on ' + config.dburl))
-    .on('error', (error) => {
-        console.warn('Warning', error.toString());
-    });
+  mongoose.connect(config.dburl, config.dbOptions);
+  return mongoose.connection;
+}
 
-module.exports = connection;
+module.exports = {
+  connect
+};
