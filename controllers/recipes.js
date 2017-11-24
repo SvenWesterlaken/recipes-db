@@ -1,4 +1,5 @@
 const Recipe = require('../models/recipe');
+const mongoose = require('mongoose');
 const _ = require('lodash');
 
 module.exports = {
