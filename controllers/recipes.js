@@ -19,9 +19,8 @@ module.exports = {
 
   read(req, res, next) {
 
-    Recipe.find({}).then((recipes) => {
-      res.send(recipes);
-    }).catch(() => next());
+    Recipe.find({}).then((recipes) =>
+      res.send(recipes)).catch(() => next());
 
   }
 
