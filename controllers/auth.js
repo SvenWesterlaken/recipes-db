@@ -22,16 +22,16 @@ module.exports = {
           res.status(200).json({ msg: "User succesfully registered"});
 
         } else {
-          res.status(401).json({error: "User already exists"});
+          res.status(409).json({error: "User already exists"});
         }
 
       }).catch((err) => {
         console.log(err);
-        res.status(402).json({error: "Oops, something went wrong"});
+        res.status(500).json({error: "Oops, something went wrong"});
       });
 
     } else {
-      res.status(401).json({error: "Invalid Registration Credentials"});
+      res.status(400).json({error: "Invalid Registration Credentials"});
     }
   },
 
@@ -53,16 +53,16 @@ module.exports = {
           }
 
         } else {
-          res.status(401).json({error: "User not found"});
+          res.status(404).json({error: "User not found"});
         }
 
       }).catch((err) => {
         console.log(err);
-        res.status(402).json({error: "Oops, something went wrong"});
+        res.status(500).json({error: "Oops, something went wrong"});
       });
 
     } else {
-      res.status(401).json({error: "Invalid Login Credentials"});
+      res.status(400).json({error: "Invalid Login Credentials"});
     }
   },
 

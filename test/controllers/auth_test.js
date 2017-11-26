@@ -10,7 +10,7 @@ const User = require('../../models/user');
 
 chai.use(chai_http);
 
-describe('User login', function() {
+describe('User login', () => {
   let test;
   let credentials = { email: 'test@test.com', password: 'test1234' };
 
@@ -49,7 +49,7 @@ describe('User login', function() {
       .send({email: "invalid@hotmail.com", password: test.password})
       .end((err, res) => {
         expect(err).to.not.be.null;
-        expect(res).to.have.status(401);
+        expect(res).to.have.status(404);
         expect(res.body).to.include({"error" : "User not found"});
         done();
       });
@@ -60,7 +60,7 @@ describe('User login', function() {
       .post('/api/v1/login')
       .end((err, res) => {
         expect(err).to.not.be.null;
-        expect(res).to.have.status(401);
+        expect(res).to.have.status(400);
         expect(res.body).to.include({error: "Invalid Login Credentials"});
         done();
       });
@@ -68,46 +68,44 @@ describe('User login', function() {
   });
 });
 
-// describe('User registration', function(done) {
-//   var randomNumber = Math.floor((Math.random() * 1000000000) + 1),
-//       userEmail = "testUser" + randomNumber + "@gmail.com",
-//       password = Math.random().toString(36).slice(-8),
-//       firstName = "Subject",
-//       lastName = randomNumber;
-//
-//
-//   it('Valid registration', function(done) {
-//     chai.request(server)
-//       .post('/api/v1/register')
-//       .send({"email" : userEmail, "password" : password, "firstname" : firstName, "lastname" : lastName})
-//       .end(function(err, res) {
-//         expect(err).to.be.null;
-//         expect(res).to.have.status(200);
-//         expect(JSON.parse(res.text)).to.have.property("affectedRows", 1);
-//         done();
-//       });
-//   });
-//
-//   it('User already exists', function(done) {
-//     chai.request(server)
-//       .post('/api/v1/register')
-//       .send({"email" : userEmail, "password" : password, "firstname" : firstName, "lastname" : lastName})
-//       .end(function(err, res) {
-//         expect(err).to.not.be.null;
-//         expect(res).to.have.status(401);
-//         expect(res.body).to.include({"error" : "User already exists."});
-//         done();
-//       });
-//   });
-//
-//   it('No information given', function(done) {
-//     chai.request(server)
-//       .post('/api/v1/register')
-//       .end(function(err, res) {
-//         expect(err).to.not.be.null;
-//         expect(res).to.have.status(401);
-//         expect(res.body).to.include({"error" : "No(t enough) register credentials in the body."});
-//         done();
-//       });
-//   });
-// });
+describe('User registration', () => {
+  let credentials = { email: 'test@test.com', password: 'test1234' };
+
+  it('Valid registration', function(done) {
+    chai.request(server)
+      .post('/api/v1/register')
+      .send(credentials)
+      .end((err, res) => {
+        expect(err).to.be.null;
+        expect(res).to.have.status(200);
+        expect(res.body).to.include({ "msg": "User succesfully registered"});
+        done();
+      });
+  });
+
+  it('User already exists', (done) => {
+    User.create(credentials).then(() => {
+
+      chai.request(server)
+        .post('/api/v1/register')
+        .send(credentials)
+        .end((err, res) => {
+          expect(err).to.not.be.null;
+          expect(res).to.have.status(409);
+          expect(res.body).to.include({ error: "User already exists"});
+          done();
+        });
+    });
+  });
+
+  it('No information given', (done) => {
+    chai.request(server)
+      .post('/api/v1/register')
+      .end((err, res) => {
+        expect(err).to.not.be.null;
+        expect(res).to.have.status(400);
+        expect(res.body).to.include({error: "Invalid Registration Credentials"});
+        done();
+      });
+  });
+});

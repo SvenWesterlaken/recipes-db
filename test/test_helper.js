@@ -3,7 +3,7 @@ const mongodb = require('../config/mongo.db');
 const config = require('../config/env');
 
 before((done) => {
-  mongodb.connect(config.dbUrl, config.dbOptions).once('open', () => done() ).on('error', (err) => console.warn('Warning', error));
+  mongodb.connect(config.dbUrl, config.dbOptions).once('open', () => done() ).on('error', (err) => console.warn('Warning', err));
 });
 
 beforeEach((done) => {
