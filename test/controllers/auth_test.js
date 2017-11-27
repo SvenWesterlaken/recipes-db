@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chai_http = require('chai-http');
-const server = require('../../index.js');
+const server = require('../../index');
 const sinon = require('sinon');
 const auth = require('../../auth/auth');
 const expect = chai.expect;
@@ -71,7 +71,7 @@ describe('User login', () => {
 describe('User registration', () => {
   let credentials = { email: 'test@test.com', password: 'test1234' };
 
-  it('Valid registration', function(done) {
+  it('Valid registration', (done) => {
     chai.request(server)
       .post('/api/v1/register')
       .send(credentials)
@@ -105,6 +105,38 @@ describe('User registration', () => {
         expect(err).to.not.be.null;
         expect(res).to.have.status(400);
         expect(res.body).to.include({error: "Invalid Registration Credentials"});
+        done();
+      });
+  });
+});
+
+describe('Token validation', (done) => {
+  const credentials = { email: 'test@test.com', password: 'test1234' };
+  let clock;
+
+  before(() => {
+    clock = sinon.useFakeTimers();
+  });
+
+  after(() => {
+    clock.restore();
+  })
+
+  it('Token expired', (done) => {
+
+    const token = auth.encodeToken(credentials.email);
+
+    expect(token).to.not.be.null;
+    expect(token).to.be.a('string');
+
+    clock.tick(73e5);
+
+    chai.request(server)
+      .get('/api/v1/recipes')
+      .set('W-Access-Token', token)
+      .end((err, res) => {
+        expect(err).to.not.be.null;
+        expect(res).to.have.status(401);
         done();
       });
   });

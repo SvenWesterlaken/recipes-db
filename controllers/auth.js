@@ -13,7 +13,7 @@ module.exports = {
     let password = req.body.password || '';
 
     if(email != '' || password != '') {
-      User.findOne({ email: email }).then((user) => {
+      User.findOne({ email: email }).catch((err) => next()).then((user) => {
 
         if(!user) {
 
@@ -25,9 +25,6 @@ module.exports = {
           res.status(409).json({error: "User already exists"});
         }
 
-      }).catch((err) => {
-        console.log(err);
-        res.status(500).json({error: "Oops, something went wrong"});
       });
 
     } else {
@@ -42,7 +39,7 @@ module.exports = {
 
     if(email != '' || password != '') {
 
-      User.findOne({ email: email }).then((user) => {
+      User.findOne({ email: email }).catch((err) => next()).then((user) => {
 
         if(user) {
 
@@ -56,9 +53,6 @@ module.exports = {
           res.status(404).json({error: "User not found"});
         }
 
-      }).catch((err) => {
-        console.log(err);
-        res.status(500).json({error: "Oops, something went wrong"});
       });
 
     } else {

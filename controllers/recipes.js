@@ -7,8 +7,6 @@ module.exports = {
   create(req, res, next) {
     let recipes = req.body;
 
-    // console.log(recipes);
-
     if(_.isEmpty(recipes) || !_.isArray(recipes)) {
       res.status(422).json({ error: "Invalid recipes in body" });
     } else {
@@ -18,10 +16,7 @@ module.exports = {
   },
 
   read(req, res, next) {
-
-    Recipe.find({}).then((recipes) =>
-      res.send(recipes)).catch(() => next());
-
+    Recipe.find({}).then((recipes) => res.send(recipes)).catch(() => next());
   }
 
 }
