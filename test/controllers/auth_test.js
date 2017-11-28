@@ -140,4 +140,14 @@ describe('Token validation', (done) => {
         done();
       });
   });
+
+  it('No token given', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes')
+      .end((err, res) => {
+        expect(err).to.not.be.null;
+        expect(res).to.have.status(401);
+        done();
+      });
+  })
 });
