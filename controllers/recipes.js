@@ -5,18 +5,42 @@ const _ = require('lodash');
 module.exports = {
 
   create(req, res, next) {
-    let recipes = req.body;
+    let body = req.body
 
-    if(_.isEmpty(recipes) || !_.isArray(recipes)) {
+    if(_.isEmpty(body)) {
       res.status(422).json({ error: "Invalid recipes in body" });
-    } else {
+    } else if (_.isArray(body)) {
       mongoose.connection.collections.recipes.drop();
-      Recipe.create(recipes).then((recipes) => res.status(201).send(recipes)).catch((err) => next());
+      Recipe.create(body).then((recipes) => res.status(201).send(recipes)).catch((err) => next(err));
+    } else {
+      let recipe = new Recipe(body);
+      recipe.save().then(() => res.sendStatus(201)).catch(err => next(err));
     }
   },
 
   read(req, res, next) {
-    Recipe.find({}).then((recipes) => res.send(recipes)).catch(() => next());
+    let id = req.params.id || '';
+
+    if(id !== '') {
+      Recipe.findById(id).then((recipe) => res.send(recipe)).catch((err) => next(err));
+    } else {
+      Recipe.find({}).then((recipes) => res.send(recipes)).catch((err) => next(err));
+    }
+
+  },
+
+  delete(req, res, next) {
+    let recipeId = req.params.id;
+
+    Recipe.findByIdAndRemove(recipeId).then((recipe) => res.status(202).send(recipe)).catch((err) => next(err));
+  },
+
+  update(req, res, next) {
+    let recipe = req.body;
+
+    Recipe.findByIdAndUpdate(recipe._id, recipe).then((recipe) => res.status(202).send(recipe)).catch((err) => next(err));
   }
+
+
 
 }

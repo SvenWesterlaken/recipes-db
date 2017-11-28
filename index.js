@@ -42,7 +42,7 @@ app.use('/api/v1', require('./routes/api_v1'));
 
 //Error handler
 app.use((err, req, res, next) => {
-  res.status(422).send({ name: err.name, code: err.code, message: err.message, status: err.status });
+  res.status(err.status || 422).send({ name: err.name, code: err.code, message: err.message, status: err.status });
 });
 
 app.all('*', basic.notFound);

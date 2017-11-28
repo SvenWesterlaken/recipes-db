@@ -10,10 +10,12 @@ router.post('/register', auth.register);
 router.post('/login', auth.login);
 
 //Authenticate recipe endpoints
-router.all('/recipes', auth.authenticate);
+router.all('/recipes/:id?', auth.authenticate);
 
 //Recipe endpoints
-router.get('/recipes', recipes.read);
+router.get('/recipes/:id?', recipes.read);
 router.post('/recipes', recipes.create);
+router.put('/recipes', recipes.update);
+router.delete('/recipes/:id', recipes.delete);
 
 module.exports = router;
