@@ -38,9 +38,7 @@ module.exports = {
   update(req, res, next) {
     let recipe = req.body;
 
-    Recipe.findByIdAndUpdate(recipe._id, recipe).then((recipe) => res.status(202).send(recipe)).catch((err) => next(err));
+    Recipe.findByIdAndUpdate(recipe._id, recipe).then(() => res.status(202).send(recipe)).catch((err) => next(err));
   }
-
-
 
 }

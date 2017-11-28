@@ -98,43 +98,57 @@ describe('Recipes controller', () => {
          });
     });
 
-    it('POST to /api/v1/recipes creates a new recipe if recipe is valid', (done) => {
+    it('GET to /api/v1/recipes/:id returns the correct recipe if it exists', (done) => {
+        Recipe.create(burger)
+            .then((burgerDb) => {
+                chai.request(server)
+                    .get('/api/v1/recipes/' + burgerDb.id)
+                    .set('W-Access-Token', accessToken)
+                    .end((err, res) => {
+                        expect(err).to.be.null;
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.include({ name: 'Big Fat Burger' });
+                      done();
+                    });
+            });
+    });
+
+    it('GET to /api/v1/recipes/:id returns an error if recipe does not exist', (done) => {
         chai.request(server)
-            .post('/api/v1/recipes')
+            .get('/api/v1/recipes/1')
             .set('W-Access-Token', accessToken)
-            .send([
-                new Recipe({
-                    name: 'Big Fat Burger',
-                    description: 'Just full of fat, what else?',
-                    imagePath: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
-                    ingredients: [
-                        { name: 'Buns', amount: '2'},
-                        { name: 'Cheese', amount: '2'},
-                        { name: 'Steak', amount: '1'},
-                        { name: 'Bacon', amount: '2'}
-                    ]
-                })
-            ])
             .end((err, res) => {
-                expect(err).to.be.null;
-                expect(res).to.have.status(201);
-                expect(res.body[0]).to.include({ name: 'Big Fat Burger' });
+                expect(err).to.not.be.null;
+                expect(res).to.have.status(422);
                 done();
             });
     });
 
-    it('POST to /api/v1/recipes returns an error if recipe is invalid', (done) => {
+    it('POST to /api/v1/recipes creates a new recipe if recipe is valid', (done) => {
         chai.request(server)
             .post('/api/v1/recipes')
             .set('W-Access-Token', accessToken)
-            .send(new Recipe())
+            .send(burger)
             .end((err, res) => {
-                expect(err).to.not.be.null;
-                expect(res).to.have.status(422);
-                expect(res.body).to.include({"error" : "Invalid recipes in body"});
+                expect(err).to.be.null;
+                expect(res).to.have.status(201);
                 done();
             });
     });
+
+    it('POST to /api/v1/recipes creates multiple recipes if recipes are valid', (done) => {
+        chai.request(server)
+            .post('/api/v1/recipes')
+            .set('W-Access-Token', accessToken)
+            .send([burger, schnitzel])
+            .end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(201);
+                expect(res.body).to.be.a('array').and.have.lengthOf(2);
+                done();
+            });
+    });
+
 
     it('POST to /api/v1/recipes returns an error if array is empty', (done) => {
         chai.request(server)
@@ -145,6 +159,61 @@ describe('Recipes controller', () => {
                 expect(err).to.not.be.null;
                 expect(res).to.have.status(422);
                 expect(res.body).to.include({"error" : "Invalid recipes in body"});
+                done();
+            });
+    });
+
+    it('DELETE to /api/v1/recipes/:id deletes the correct recipe if it exists', (done) => {
+        Recipe.create(burger)
+            .then((burgerDb) => {
+                chai.request(server)
+                    .delete('/api/v1/recipes/' + burgerDb.id)
+                    .set('W-Access-Token', accessToken)
+                    .end((err, res) => {
+                        expect(err).to.be.null;
+                        expect(res).to.have.status(202);
+                        done();
+                    });
+            });
+    });
+
+    it('DELETE to /api/v1/recipes/:id returns an error if recipe does not exist', (done) => {
+        chai.request(server)
+            .delete('/api/v1/recipes/1')
+            .set('W-Access-Token', accessToken)
+            .end((err, res) => {
+                expect(err).to.not.be.null;
+                expect(res).to.have.status(422);
+                done();
+            });
+    });
+
+    it('PUT to /api/v1/recipes updates the correct recipe if it exists', (done) => {
+        Recipe.create(burger)
+            .then((burgerDb) => {
+            burgerDb.name = "Small wrap";
+                chai.request(server)
+                    .put('/api/v1/recipes')
+                    .send(burgerDb)
+                    .set('W-Access-Token', accessToken)
+                    .end((err, res) => {
+                        expect(err).to.be.null;
+                        expect(res).to.have.status(202);
+                        expect(res.body).to.include({ name: 'Small wrap' });
+                        done();
+                    });
+
+            });
+    });
+
+    it('PUT to /api/v1/recipes returns an error if recipe does not exist', (done) => {
+        chai.request(server)
+            .put('/api/v1/recipes/1')
+            .send({ name: 'Small wrap' })
+            .set('W-Access-Token', accessToken)
+            .end((err, res) => {
+                expect(err).to.not.be.null;
+                expect(res).to.have.status(404);
                 done();
             });
     });
