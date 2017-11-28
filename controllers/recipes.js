@@ -10,7 +10,7 @@ module.exports = {
     if(_.isEmpty(body)) {
       res.status(422).json({ error: "Invalid recipes in body" });
     } else if (_.isArray(body)) {
-      mongoose.connection.collections.recipes.drop();
+      mongoose.connection.collections.recipes.drop().catch(() => {});
       Recipe.create(body).then((recipes) => res.status(201).send(recipes)).catch((err) => next(err));
     } else {
       let recipe = new Recipe(body);
